@@ -1,5 +1,5 @@
 import { PointCharge } from './pointcharge.js';
-import { ElectricFlux } from './ElectricFlux.js';
+import { ElectricFlux } from './electricflux.js';
 
 class App {
     constructor() {
