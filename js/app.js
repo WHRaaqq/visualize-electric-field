@@ -1,14 +1,17 @@
 import { PointCharge } from './pointcharge.js';
-import { ElectricFlux } from './ElectricFlux.js';
+import { ElectricFlux } from './electricflux.js';
 
 class App {
     constructor() {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
 
+        this.selected_div = document.getElementById('charge_control_div');
+
         document.getElementById("add_point_charge").onclick = this.addPointCharge.bind(this);
         this.charge_input = document.getElementById("change_charge");
         this.charge_input.onchange = this.changeSelectedCharge.bind(this);
+        document.getElementById("delete_charge").onclick = this.deleteSelectedCharge.bind(this);
 
         this.clickable_objs = [];
 
@@ -23,6 +26,8 @@ class App {
             this.canvas.addEventListener("mouseleave", this.stopDraging.bind(this));
             this.canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
         }
+
+        this.draw();
     }
 
     draw() {
@@ -54,15 +59,34 @@ class App {
     }
 
     changeSelectedCharge() {
+        console.log("changeSelectedCharge");
         if (this.selected_obj == null) return;
-        this.selected_obj.c = this.charge_input.value;
+        this.selected_obj.setCharge(this.charge_input.value);
 
         this.draw();
     }
 
+    deleteSelectedCharge() {
+        if (this.selected_obj == null) return;
+
+        const selected_index = this.clickable_objs.findIndex((obj) => obj === this.selected_obj);
+        if (selected_index > -1) {
+            this.clickable_objs.splice(selected_index, 1);
+        }
+        this.selected_obj = null;
+        this.selected_div.style.visibility = 'hidden';
+
+        this.draw();
+    }
+
+    getMousePos(e) {
+        var rect = this.canvas.getBoundingClientRect();
+        return [e.clientX - rect.left, e.clientY - rect.top];
+    }
+
     startDraging(e) {
-        const ex = e.x;
-        const ey = e.y;
+        console.log('asdfasdf');
+        const [ex, ey] = this.getMousePos(e);
         this.clickable_objs.forEach(o => {
             if (o.collidePoint(ex, ey)) {
                 this.draging_obj = o;
@@ -73,6 +97,7 @@ class App {
 
         this.selected_obj = this.draging_obj;
         this.charge_input.value = this.selected_obj.c;
+        this.selected_div.style.visibility = 'visible';
 
         const dx = this.draging_obj.x - ex;
         const dy = this.draging_obj.y - ey;
@@ -87,8 +112,9 @@ class App {
     onMouseMove(e) {
         if (this.draging_obj == null) return;
 
-        const x = e.x + this.offset.x;
-        const y = e.y + this.offset.y;
+        const [ex, ey] = this.getMousePos(e);
+        const x = ex + this.offset.x;
+        const y = ey + this.offset.y;
         this.draging_obj.moveTo(x, y);
 
         this.draw();

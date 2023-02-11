@@ -2,9 +2,8 @@ export class PointCharge {
     constructor(x, y, c) {
         this.x = x;
         this.y = y;
-        this.c = c;
 
-        this.color = '#FF0000';
+        this.setCharge(c);
     }
 
     draw(ctx) {
@@ -29,6 +28,8 @@ export class PointCharge {
     }
 
     setCharge(c) {
-        this.c = c;
+        this.c = c != 0 ? c : 1;
+        if (c < 0) this.color = '#FF0000';
+        else this.color = '#0000FF';
     }
 }

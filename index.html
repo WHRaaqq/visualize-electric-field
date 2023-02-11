@@ -4,16 +4,25 @@
 </head>
 
 <body>
+    <div>
+        Add point charge and drag them
+        <button id="add_point_charge">Add Point Charge</button>
+    </div>
+
+    <div id="charge_control_div" style="visibility:hidden;">
+        <br /> Charge:
+        <input type="number" value=0 id="change_charge"></input>
+
+        <br /> Delete selected point charge
+        <button id="delete_charge">delete</button>
+
+    </div>
+
+
     <canvas id="canvas" width="800" height="800"></canvas>
     <br /><br />
 
-    <button id="add_point_charge">Add Point Charge</button>
 
-    <br /> Charge:
-    <input type="number" value=0 id="change_charge"></input>
-
-    <br /> Delete selected point charge
-    <button>delet</button>
 
 
     <script src="./js/app.js" type="module"></script>
